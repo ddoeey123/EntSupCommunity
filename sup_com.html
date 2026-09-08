@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>서포터즈 커뮤니티</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="https://editor-static.pstatic.net/v/basic/1.66.0/css/se.viewer.css">
+  <link rel="stylesheet" href="sup_com.css">
+</head>
+<body>
+  <div class="bg-glow bg-glow-a"></div>
+  <div class="bg-glow bg-glow-b"></div>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="brand">
+        <span class="brand-mark"><i class="fa-solid fa-users"></i></span>
+        <div>
+          <p class="eyebrow">ENTRY SUPPORTERS ARCHIVE</p>
+          <h1>서포터즈 커뮤니티</h1>
+        </div>
+      </div>
+      <div class="db-actions">
+        <span id="db-state" class="db-state"><i class="fa-solid fa-circle"></i> AWS 데이터 연결 대기</span>
+        <button id="db-open" class="btn btn-ghost" type="button" hidden>
+          <i class="fa-regular fa-folder-open"></i>
+          DB 연결
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="class-card">
+      <div class="class-head">
+        <div>
+          <p class="section-kicker">CLASS COMMUNITY</p>
+          <h2 id="grp-name">학급 DB를 선택해 주세요</h2>
+          <p id="grp-meta">AWS DynamoDB에 저장된 커뮤니티 데이터입니다.</p>
+        </div>
+        <span id="post-total" class="total-pill">게시글 0</span>
+      </div>
+      <nav id="grp-tabs" class="grp-tabs" aria-label="학급 커뮤니티 선택"></nav>
+    </section>
+
+    <section id="list-view" class="community-card">
+      <div class="community-title">
+        <div>
+          <span class="title-icon"><i class="fa-regular fa-comments"></i></span>
+          <div>
+            <p class="section-kicker">COMMUNITY BOARD</p>
+            <h3>학급 커뮤니티</h3>
+          </div>
+        </div>
+        <button id="db-refresh" class="btn btn-refresh" type="button" disabled>
+          <i class="fa-solid fa-rotate-right"></i>
+          새로고침
+        </button>
+      </div>
+
+      <div class="toolbar">
+        <div class="select-row">
+          <div id="sort" class="drop" data-val="created">
+            <button class="drop-btn" type="button" aria-haspopup="listbox" aria-expanded="false">
+              <span>최신순</span><i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="drop-menu" role="listbox" aria-label="정렬">
+              <button type="button" role="option" data-v="created" aria-selected="true">최신순</button>
+              <button type="button" role="option" data-v="visit">조회순</button>
+              <button type="button" role="option" data-v="likes">좋아요순</button>
+              <button type="button" role="option" data-v="comments">댓글순</button>
+            </div>
+          </div>
+          <div id="term" class="drop" data-val="all">
+            <button class="drop-btn" type="button" aria-haspopup="listbox" aria-expanded="false">
+              <span>전체 기간</span><i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="drop-menu" role="listbox" aria-label="기간">
+              <button type="button" role="option" data-v="all" aria-selected="true">전체 기간</button>
+              <button type="button" role="option" data-v="today">오늘</button>
+              <button type="button" role="option" data-v="week">최근 1주</button>
+              <button type="button" role="option" data-v="month">최근 1개월</button>
+            </div>
+          </div>
+          <div id="page-size" class="drop count-box" data-val="10">
+            <button class="drop-btn" type="button" aria-haspopup="listbox" aria-expanded="false">
+              <span>10개씩</span><i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="drop-menu" role="listbox" aria-label="페이지당 글 수">
+              <button type="button" role="option" data-v="10" aria-selected="true">10개씩</button>
+              <button type="button" role="option" data-v="30">30개씩</button>
+              <button type="button" role="option" data-v="50">50개씩</button>
+              <button type="button" role="option" data-v="70">70개씩</button>
+              <button type="button" role="option" data-v="100">100개씩</button>
+            </div>
+          </div>
+        </div>
+        <label class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input id="search" type="search" placeholder="제목, 내용, 작성자 검색" autocomplete="off">
+          <button id="search-clear" type="button" aria-label="검색어 지우기">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </label>
+      </div>
+
+      <div id="board-msg" class="board-msg">
+        <span class="msg-icon"><i class="fa-solid fa-database"></i></span>
+        <strong>AWS 데이터를 불러오는 중입니다.</strong>
+        <p>잠시 후 현재 학급의 글 목록이 표시됩니다.</p>
+      </div>
+
+      <div id="board" class="board" hidden>
+        <div class="board-head">
+          <span>제목</span>
+          <span>작성자</span>
+          <span>작성일</span>
+          <span>조회</span>
+          <span>좋아요</span>
+        </div>
+        <div id="post-list"></div>
+      </div>
+
+      <nav id="pagination" class="pagination" aria-label="게시글 페이지"></nav>
+    </section>
+
+    <section id="detail-view" class="detail-card" hidden>
+      <div class="detail-nav">
+        <button id="detail-back" class="btn btn-ghost" type="button">
+          <i class="fa-solid fa-arrow-left"></i>
+          목록으로
+        </button>
+        <div>
+          <button id="detail-prev" class="icon-btn" type="button" aria-label="이전 글">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <button id="detail-next" class="icon-btn" type="button" aria-label="다음 글">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+      <article id="detail-post"></article>
+      <section class="comments">
+        <div class="comments-head">
+          <div>
+            <i class="fa-regular fa-comment-dots"></i>
+            <h4>댓글</h4>
+            <span id="comment-count">0</span>
+          </div>
+          <span>최신순</span>
+        </div>
+        <div id="comment-list"></div>
+      </section>
+    </section>
+  </main>
+
+  <input id="db-file" type="file" accept=".db,application/x-sqlite3" hidden>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="loading" class="loading" hidden>
+    <span class="loader"></span>
+    <p>AWS 데이터를 불러오고 있습니다.</p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.6/purify.min.js"></script>
+  <script src="sup_com.js"></script>
+</body>
+</html>
